@@ -1,0 +1,42 @@
+﻿@model Core.Models.Despesa
+
+@{
+    ViewData["Title"] = "ViewDespesa";
+}
+
+<h1>ViewDespesa</h1>
+
+<div>
+    <h4>Despesa</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Descricao)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Valor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Valor)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoriaId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CategoriaId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-sm btn-danger btn-icon" asp-controller="despesa" asp-action="EditDespesa" asp-route-id="@Model.Id"><i class="far fa-edit"></i></a>
+    <a asp-action="Index">Back to List</a>
+</div>

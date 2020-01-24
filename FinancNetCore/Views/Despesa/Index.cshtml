@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Despesa";
+}
+
+@model List<ViewDespesaViewModel>
+
+
+<h4 class="title">Lista Despesas</h4>
+<p class="category">
+    <a class="btn btn-sm btn-danger btn-icon" asp-controller="despesa" asp-action="EditDespesa" asp-route-id="0"><i class="fas fa-plus"></i></a>
+</p>
+
+<p class="content table-responsive table-full-width">
+    <table class="table table-striped" style="max-width:500px">
+        <thead class="text-primary" style="background-color: beige">
+            <tr>
+                <th>Id</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Categ</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Descricao</td>
+                <td>@item.Valor</td>
+                <td>@item.Categoria</td>
+                <td>
+                    <a class="btn btn-sm btn-danger btn-icon" asp-controller="despesa" asp-action="ViewDespesa" asp-route-id="@item.Id"><i class="far fa-file"></i></a>
+                    <a class="btn btn-sm btn-danger btn-icon" asp-controller="despesa" asp-action="EditDespesa" asp-route-id="@item.Id"><i class="far fa-edit"></i></a>
+                    <a class="btn btn-sm btn-danger btn-icon" asp-controller="despesa" asp-action="DelDespesa" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</p>
