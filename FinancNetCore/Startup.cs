@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Api.Contexts;
+using Api.Models;
 using Core.Interfaces;
 using Core.Services;
 using Microsoft.AspNetCore.Builder;
@@ -28,6 +29,15 @@ namespace FinancNetCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<IdentityAppContext>();
+            
+            services.AddDbContext<IdentityAppContext>(options =>
+                    options.UseNpgsql(Configuration.GetConnectionString("IdentityDB")));
+
+
             string connectionString = Configuration.GetConnectionString("FinancDB");
 
             services.AddTransient<CategoriaService>();
@@ -59,6 +69,7 @@ namespace FinancNetCore
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
