@@ -1,4 +1,5 @@
 ﻿using Api.Models;
+using Api.ViewModels;
 using Core.Models;
 using Core.Services;
 using Microsoft.AspNetCore.Identity;
@@ -22,23 +23,32 @@ namespace Api.Controllers
             SignInMgr = signInManager;
         }
 
-        public async Task<IActionResult> Register()
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel userForm)
         {
             try
             {
                 ViewBag.Message = "User already registered";
 
-                AppUser user = await UserMgr.FindByNameAsync("testuser");
+                AppUser user = await UserMgr.FindByNameAsync(userForm.UserName);
                 if (user == null)
                 {
                     user = new AppUser();
-                    user.UserName = "testuser";
-                    user.Email = "a@a.com";
-                    user.FirstName = "Thiago";
-                    user.LastName = "Kaiser";
+                    user.UserName = userForm.UserName;
+                    user.Email = userForm.Email;
+                    user.FirstName = userForm.FirstName;
+                    user.LastName = userForm.LastName;
 
-                    IdentityResult result = await UserMgr.CreateAsync(user, "Test@123");
-                    ViewBag.Message = "User was created";
+                    IdentityResult result = await UserMgr.CreateAsync(user, userForm.Password);
+                    if (result.Succeeded)
+                    {
+                        ViewBag.Message = "User was created";
+                    }
+                    else
+                    {                        
+                        ViewBag.Message = result.Errors;
+                    }
+                    
                 }
             }
             catch(Exception ex)
@@ -48,18 +58,29 @@ namespace Api.Controllers
 
             return View();
         }
-
-        public async Task<IActionResult> Login()
+        [HttpGet]
+        public async Task<IActionResult> Register()
         {
-            var result = await SignInMgr.PasswordSignInAsync("testuser","Test@123", false, false);
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel user)
+        {
+            var result = await SignInMgr.PasswordSignInAsync(user.UserName,user.Password, false, false);
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Home");
             }
             else
             {
-                ViewBag.Result = "Result is: " + result.ToString();
+                ViewBag.Result = "Usuário e senha incorretos";
             }
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Login()
+        {
             return View();
         }
 
